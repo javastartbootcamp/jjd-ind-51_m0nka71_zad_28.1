@@ -1,8 +1,8 @@
 package pl.javastart.restoffers.offer;
 
+import jakarta.persistence.*;
 import pl.javastart.restoffers.category.Category;
 
-import javax.persistence.*;
 
 @Entity
 public class Offer {

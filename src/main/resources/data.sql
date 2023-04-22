@@ -7,7 +7,7 @@ VALUES
     (4, 'Moda', 'Najnowsze trendy i kolekcje');
 
 INSERT INTO
-    offer(title, description, imgUrl, price, category_id)
+    offer(title, description, img_url, price, category_id)
 VALUES
     ('Telewizor', 'Telewizor z technologią OLED, każdy obraz wciąga swoim bogactwem barw.',
      'https://www.mediaexpert.pl/media/cache/resolve/filemanager_original/images/descriptions/images/28/2809603/storage_app_opisy2_lg_400062/telewizor_lg_r19la_1_banner.jpg',

@@ -1,12 +1,10 @@
 package pl.javastart.restoffers.offer;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequestMapping("api/offers")
 @RestController
@@ -18,10 +16,15 @@ public class OfferRestController {
         this.offerRepository = offerRepository;
     }
 
-    @GetMapping("/")
-    public List<Offer> findAll() {
-        offerRepository.findAll();
-        return offerRepository.findAll();
+    @GetMapping("")
+    public List<Offer> findAllOrByName(@RequestParam(required = false, name = "title") String title) {
+        List<Offer> offersByName;
+        if (title != null) {
+            offersByName = offerRepository.findAllByTitle(title);
+            return offersByName;
+        } else {
+            return offerRepository.findAll();
+        }
     }
 
     @GetMapping("/count")
@@ -30,17 +33,21 @@ public class OfferRestController {
         return offers.size();
     }
 
-    @GetMapping("/?title=param_value")
-    public List<Offer> offerByName(@RequestParam String title) {
-        List<Offer> offers = offerRepository.findAll();
-        List<Offer> offersByName = new ArrayList<>();
-        for (Offer offer : offers) {
-            if (offer.getTitle().equals(title)) {
-                offersByName.add(offer);
-                return offersByName;
-            }
-        }
-        return offers;
+    @PostMapping("")
+    public Offer addOffer(@RequestBody Offer offer) {
+        return offerRepository.save(offer);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Offer> findById(@PathVariable Long id) {
+        Optional<Offer> offer = offerRepository.findById(id);
+        return offer
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteById(@PathVariable Long id) {
+        offerRepository.deleteById(id);
+    }
 }

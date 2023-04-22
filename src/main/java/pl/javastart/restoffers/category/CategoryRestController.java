@@ -1,8 +1,6 @@
 package pl.javastart.restoffers.category;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -10,14 +8,29 @@ import java.util.List;
 @RestController
 public class CategoryRestController {
 
-    private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
 
-    public CategoryRestController(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
+    public CategoryRestController(CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
+
+    @GetMapping("")
+    public List<Category> findAll() {
+        return categoryService.findAll();
     }
 
     @GetMapping("/names")
-    public List<Category> categoriesNames(String name) {
-        return categoryRepository.findAllByName(name);
+    public List<String> categoriesNames() {
+        return categoryService.findByName();
+    }
+
+    @PostMapping("")
+    public Category addCategory(@RequestBody Category category) {
+        return categoryService.addCategory(category);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteById(@PathVariable Long id) {
+        categoryService.deleteById(id);
     }
 }
