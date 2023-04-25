@@ -1,15 +1,8 @@
 package pl.javastart.restoffers.offer;
 
-import jakarta.persistence.*;
-import pl.javastart.restoffers.category.Category;
+public class OfferDto {
 
-@Entity
-public class Offer {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String title;
 
     private String description;
@@ -18,10 +11,9 @@ public class Offer {
 
     private double price;
 
-    @ManyToOne
-    private Category category;
+    private String category;
 
-    public Offer() {
+    public OfferDto() {
     }
 
     public Long getId() {
@@ -64,11 +56,13 @@ public class Offer {
         this.price = price;
     }
 
-    public Category getCategory() {
+    public String getCategory() {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(String category) {
         this.category = category;
     }
 }
+
+

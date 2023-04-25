@@ -1,10 +1,10 @@
 INSERT INTO
-    category(id, name, description)
+    category(name, description)
 VALUES
-    (1, 'Elektronika', 'Zaopatrz się w najwyższej jakości sprzęt elektroniczny'),
-    (2, 'Meble', 'Stylowe i starannie wykonane meble'),
-    (3, 'Ogród', 'Sprzęt ogrodowy, który ułatwi Ci pracę'),
-    (4, 'Moda', 'Najnowsze trendy i kolekcje');
+    ('Elektronika', 'Zaopatrz się w najwyższej jakości sprzęt elektroniczny'),
+    ('Meble', 'Stylowe i starannie wykonane meble'),
+    ('Ogród', 'Sprzęt ogrodowy, który ułatwi Ci pracę'),
+    ('Moda', 'Najnowsze trendy i kolekcje');
 
 INSERT INTO
     offer(title, description, img_url, price, category_id)
