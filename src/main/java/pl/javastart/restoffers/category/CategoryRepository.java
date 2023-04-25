@@ -2,7 +2,9 @@ package pl.javastart.restoffers.category;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
-    Category findByName(String title);
+    Optional<Category> findByName(String title);
 }

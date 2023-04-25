@@ -4,7 +4,9 @@ import org.springframework.stereotype.Service;
 import pl.javastart.restoffers.category.Category;
 import pl.javastart.restoffers.category.CategoryRepository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OfferService {
@@ -18,6 +20,23 @@ public class OfferService {
         this.categoryRepository = categoryRepository;
     }
 
+    public Optional<OfferDto> findById(Long id) {
+        return offerRepository.findById(id).map(this::toDto);
+    }
+
+    public List<OfferDto> findAllOrByTitle(String title) {
+        List<Offer> offersByName;
+        if (title != null) {
+            offersByName = offerRepository.findAllByTitleContainingIgnoreCase(title);
+        } else {
+            offersByName = offerRepository.findAll();
+        }
+        return offersByName
+                .stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+    }
+
     public OfferDto toDto(Offer offer) {
         OfferDto offerDto = new OfferDto();
         offerDto.setId(offer.getId());
@@ -29,14 +48,29 @@ public class OfferService {
         return offerDto;
     }
 
-    public Optional<OfferDto> findById(Long id) {
-        return offerRepository.findById(id).map(this::toDto);
+    private Offer toOffer(OfferDto offerDto) {
+        Offer offer = new Offer();
+        offer.setId(offerDto.getId());
+        offer.setTitle(offerDto.getTitle());
+        offer.setDescription(offerDto.getDescription());
+        offer.setImgUrl(offerDto.getImgUrl());
+        offer.setPrice(offerDto.getPrice());
+        Category category = categoryRepository.findByName(offerDto.getCategory()).orElseThrow();
+        offer.setCategory(category);
+        return offer;
     }
 
-    public void save(OfferDto offerDto) {
-        Offer offer = new Offer();
-        Category category = categoryRepository.findByName(offerDto.getTitle());
-        offer.setCategory(category);
-        offerRepository.save(offer);
+    public OfferDto save(OfferDto offerDto) {
+        Offer offer = toOffer(offerDto);
+        Offer savedEntity = offerRepository.save(offer);
+        return toDto(savedEntity);
+    }
+
+    public void deleteById(Long id) {
+        offerRepository.deleteById(id);
+    }
+
+    public long countOffers() {
+        return offerRepository.count();
     }
 }

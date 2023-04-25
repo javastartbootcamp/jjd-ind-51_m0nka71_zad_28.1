@@ -5,44 +5,30 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RequestMapping("api/offers")
 @RestController
 public class OfferRestController {
 
-    private final OfferRepository offerRepository;
-
     private final OfferService offerService;
 
-    public OfferRestController(OfferRepository offerRepository, OfferService offerService) {
-        this.offerRepository = offerRepository;
+    public OfferRestController(OfferService offerService) {
         this.offerService = offerService;
     }
 
     @GetMapping("")
     public List<OfferDto> findAllOrByName(@RequestParam(required = false, name = "title") String title) {
-        List<Offer> offersByName;
-        if (title != null) {
-            offersByName = offerRepository.findAllByTitleContainingIgnoreCase(title);
-        } else {
-            offersByName = offerRepository.findAll();
-        }
-        return offersByName
-                .stream()
-                .map(offerService::toDto)
-                .collect(Collectors.toList());
+        return offerService.findAllOrByTitle(title);
     }
 
     @GetMapping("/count")
     public long numberOfOffers() {
-        return offerRepository.count();
+        return offerService.countOffers();
     }
 
     @PostMapping("")
     public OfferDto addOffer(@RequestBody OfferDto offerDto) {
-        offerService.save(offerDto);
-        return offerDto;
+        return offerService.save(offerDto);
     }
 
     @GetMapping("/{id}")
@@ -55,6 +41,6 @@ public class OfferRestController {
 
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id) {
-        offerRepository.deleteById(id);
+        offerService.deleteById(id);
     }
 }
